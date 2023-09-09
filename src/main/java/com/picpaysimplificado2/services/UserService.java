@@ -9,6 +9,9 @@ import com.picpaysimplificado2.infra.exceptions.OperationUnauthorizedException;
 import com.picpaysimplificado2.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -18,7 +21,7 @@ import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
     public static final String MERCHANT_NOT_AUTHORIZED = "Merchant not authorized to carry out the transfer";
     public static final String USER_WITHOUT_BALANCE = "User without enough balance!";
     private UserRepository repository;
@@ -60,5 +63,11 @@ public class UserService {
                 .stream()
                 .map(x -> new UserDTO(x))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return this.repository.findUserByEmail(username)
+                .orElseThrow(() -> new EntityNotFoundException("User not found!"));
     }
 }
