@@ -12,7 +12,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -52,5 +54,11 @@ public class UserService {
     }
     public User save(User user){
         return this.repository.save(user);
+    }
+    public List<UserDTO>listUsers(){
+        return this.repository.findAll()
+                .stream()
+                .map(x -> new UserDTO(x))
+                .collect(Collectors.toList());
     }
 }
