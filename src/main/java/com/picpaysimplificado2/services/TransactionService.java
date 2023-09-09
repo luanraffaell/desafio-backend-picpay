@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -72,5 +74,12 @@ public class TransactionService {
             return message.equalsIgnoreCase("Autorizado");
         }
         return false;
+    }
+    public List<TransactionDTO> listAllTransactions(){
+        return this.repository
+                .findAll()
+                .stream()
+                .map(x -> convertToDTO(x))
+                .collect(Collectors.toList());
     }
 }
