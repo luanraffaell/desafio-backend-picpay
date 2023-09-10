@@ -16,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
+@Builder
 @Entity
 @Table(name = "users")
 public class User implements Serializable, UserDetails {
@@ -34,7 +35,7 @@ public class User implements Serializable, UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(userType.name()));
+        return List.of(new SimpleGrantedAuthority("ROLE_"+userType.name()));
     }
 
     @Override
