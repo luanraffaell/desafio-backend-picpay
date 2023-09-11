@@ -38,9 +38,106 @@ $ git clone git@github.com:luanraffaell/desafio-backend-picpay.git
 - A aplicação Spring Boot será executada no endereço: _**`http://localhost:8080/`**_.
 
 ---
-## EndPoints
-```bash
-http://localhost:8080/users
-http://localhost:8080/users/1 <=id
-http://localhost:8080/transactions
+# REST API
+>:warning: **IMPORTANTE**:<br>
+Com exceção dos endpoints `/auth/register` e `/auth/authenticate` todos os demais se encontram protegidos, portanto é necessario inserir o token gerado no **Bearer** do cabeçalho `Authorization` antes de enviar a requisição.
+
+## Registro
+### Request
+`POST /auth/register `
+
+```JSON
+{
+   "fullName":"Andrew",
+    "ssn":"22554545",
+    "email":"andrew@test.com",
+    "balance":200,
+    "password": "asa54s5sa",
+    "userType": "COMMON_USER"
+}
 ```
+### Response
+```JSON
+{
+   "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmRyZXdAdGVzZS5jb20iLCJleHAiOjE2OTQ0MjI2MjEsImlhdCI6MTY5NDQyMTE4MX0.Pdoezr0yhu36ai1tOnHpZqCj4bLCP_Ao9w63De6RuYs"
+}
+```
+
+## Autenticação
+### Request
+`POST /auth/authenticate `
+
+```JSON
+{
+    "email":"andrew@test.com",
+    "password": "asa54s5sa"
+}
+```
+### Response
+```JSON
+{
+   "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmRyZXdAdGVzZS5jb20iLCJleHAiOjE2OTQ0MjI4ODEsImlhdCI6MTY5NDQyMTQ0MX0.O-BzBvk5DlBDe9yj-TBvNUVm4xCQHcSFrK56oYdzuiQ"
+}
+```
+## Criar transação
+### Request
+`POST /transactions `
+
+```JSON
+{
+    "amount":10,
+    "senderId":1,
+    "receptorId":2
+}
+```
+### Response
+```JSON
+{
+    "id": 1,
+    "amount": 10,
+    "senderId": 1,
+    "receptorId": 2,
+    "timesTamp": "2023-09-11T05:41:05.7686808"
+}
+```
+## Listar usuarios
+### Request
+`GET /users `
+
+### Response
+```JSON
+[
+    {
+        "fullName": "Andrew",
+        "email": "andrew@tese.com",
+        "balance": 180.00,
+        "password": "$2a$10$jTf5JHISy86k0W7ohuaqkuig3Y0ZA8fXU4sWKx21ARUIi2dcdmERG",
+        "userType": "COMMON_USER",
+        "ssn": "22554545"
+    },
+    {
+        "fullName": "Mark",
+        "email": "mark@test.com",
+        "balance": 220.00,
+        "password": "$2a$10$jTf5JHISy86k0W7ohuaqkuakdak%%Y0ZA8fXU4sWKx21ARUIi2dc$$ERG",
+        "userType": "COMMON_USER",
+        "ssn": "5546545151a"
+    }
+]
+```
+## Buscar usuario por ID
+### Request
+`GET /users/1 `
+
+### Response
+```JSON
+{
+    "fullName": "Andrew",
+    "email": "andrew@tese.com",
+    "balance": 180.00,
+    "password": "$2a$10$jTf5JHISy86k0W7ohuaqkuig3Y0ZA8fXU4sWKx21ARUIi2dcdmERG",
+    "userType": "COMMON_USER",
+    "ssn": "22554545"
+}
+```
+
